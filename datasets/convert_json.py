@@ -1,14 +1,14 @@
-import json
+import csv, json
 
-def convert(input_file, output_file, model):
+def convert(csv_file, output_file, model):
     result = []
-    with open(input_file, encoding='utf-8') as f:
-        text = json.load(f)
-        for i in text:
-            result.append({'model': model, 'fields': i})
+    with open(csv_file, encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            result.append({'model': model, 'fields': row})
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(json.dumps(result, ensure_ascii=False))
 
-convert('ads.json', 'ads.json', 'ad')
-convert('categories.json', 'categories.json', 'ad')
+convert('ads.csv', 'ad.json', 'ads.ad')
+# convert('location.csv', 'location.json', 'location')
+# convert('user.csv', 'user.json', 'user')
