@@ -1,45 +1,8 @@
 from django.db import models
+from users.models import User
+from categories.models import Category
+from users.models import User
 
-class Category(models.Model):
-    name = models.CharField(max_length=250)
-
-    class Meta:
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
-
-    def __str__(self):
-        return self.name
-
-
-class Location(models.Model):
-    name = models.CharField(max_length=250)
-    lat = models.FloatField()
-    lng = models.FloatField()
-
-    class Meta:
-        verbose_name = "Локация"
-        verbose_name_plural = "Локации"
-
-    def __str__(self):
-        return self.name
-
-
-class User(models.Model):
-    ROLES = [('member', 'member'), ('moderator', 'moderator'), ('admin', 'admin')]
-    first_name = models.CharField(max_length=250)
-    last_name = models.CharField(max_length=250)
-    username = models.CharField(max_length=250)
-    password = models.CharField(max_length=250)
-    role = models.CharField(max_length=250, choices=ROLES, default="member")
-    age = models.PositiveIntegerField()
-    locations = models.ManyToManyField(Location)
-
-    class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
-
-    def __str__(self):
-        return self.username
 
 
 class Ad(models.Model):

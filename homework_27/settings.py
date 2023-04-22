@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ads'
+    'ads',
+    'categories',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -130,4 +132,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TOTAL_ON_PAGE = 2
+TOTAL_ON_PAGE = 5

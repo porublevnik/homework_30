@@ -15,27 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from ads.views import IndexView, CategoriesListView, CategoryDetailView, CategoryCreateView, CategoryUpdateView,\
-    CategoryDeleteView,  AdsListView, AdDetailView, AdCreateView, AdUpdateView, AdDeleteView, ApUploadImageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', IndexView.as_view()),
-
-    path('cat/', CategoriesListView.as_view()),
-    path('cat/<int:pk>/', CategoryDetailView.as_view()),
-    path('cat/create/', CategoryCreateView.as_view()),
-    path('cat/update/<int:pk>/', CategoryUpdateView.as_view()),
-    path('cat/delete/<int:pk>/', CategoryDeleteView.as_view()),
-
-    path('ad/', AdsListView.as_view()),
-    path('ad/<int:pk>/', AdDetailView.as_view()),
-    path('ad/create/', AdCreateView.as_view()),
-    path('ad/update/<int:pk>/', AdUpdateView.as_view()),
-    path('ad/delete/<int:pk>/', AdDeleteView.as_view()),
-    path('ad/<int:pk>/upload_image/', ApUploadImageView.as_view()),
-
+    path('ad/', include('ads.urls')),
+    path('cat/', include('categories.urls')),
+    path('user/', include('users.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

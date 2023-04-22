@@ -19,72 +19,6 @@ class IndexView(View):
         return JsonResponse({"status": "ok"}, status=200)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoriesListView(ListView):
-    model = Category
-    def get(self, request, *args, **kwargs):
-        super().get(request, *args, **kwargs)
-
-        response = []
-        for category in self.object_list:
-            response.append({
-                'id': category.id,
-                'name': category.name
-            })
-
-        return JsonResponse(response, safe=False)
-
-
-class CategoryDetailView(DetailView):
-    model = Category
-    def get(self, request, *args, **kwargs):
-        category = self.get_object()
-        return JsonResponse({
-                'id': category.id,
-                'name': category.name
-            })
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryCreateView(CreateView):
-    model = Category
-    fields = ['name']
-    def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        category = Category.objects.create(
-            name=data['name']
-        )
-        return JsonResponse({
-                'id': category.id,
-                'name': category.name
-            })
-
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryUpdateView(UpdateView):
-    model = Category
-    fields = ['name']
-    def patch(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
-        data = json.loads(request.body)
-
-        self.object.name=data['name']
-
-        self.object.save()
-
-        return JsonResponse({
-                'id': self.object.id,
-                'name': self.object.name
-            }, safe=False)
-
-@method_decorator(csrf_exempt, name='dispatch')
-class CategoryDeleteView(DeleteView):
-    model = Category
-    success_url = "/"
-    def delete(self, request, *args, **kwargs):
-        super().delete(request, *args, **kwargs)
-
-        return JsonResponse({'status': 'ok'}, status=200)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AdsListView(ListView):
@@ -92,9 +26,7 @@ class AdsListView(ListView):
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
 
-        self.object_list = self.object_list.order_by('id')
-
-        paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)
+        paginator = Paginator(self.object_list.order_by('-price', 'id'), settings.TOTAL_ON_PAGE)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
