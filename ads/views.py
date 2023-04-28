@@ -27,8 +27,10 @@ class AdsListView(ListView):
             self.object_list = self.object_list.filter(Q(name__icontains=text))
 
         location = request.GET.get('location', None)
+        authors = User.objects.all()
         if location:
-            self.object_list = self.object_list.filter(Q(author__location__name__icontains=location))
+            authors = authors.filter(Q(locations__name__icontains=location))
+            self.object_list = self.object_list.filter(Q(author__in=authors))
 
         price_from = request.GET.get('price_from', None)
         price_to = request.GET.get('price_to', None)
