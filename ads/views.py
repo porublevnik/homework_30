@@ -1,9 +1,9 @@
 import json
 
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.core.paginator import Paginator
@@ -13,18 +13,29 @@ from homework_27 import settings
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class IndexView(View):
-    def get(self, request):
-
-        return JsonResponse({"status": "ok"}, status=200)
-
-
-
-@method_decorator(csrf_exempt, name='dispatch')
 class AdsListView(ListView):
     model = Ad
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
+
+        cat = request.GET.get('cat', None)
+        if cat:
+            self.object_list = self.object_list.filter(Q(category_id=cat))
+
+        text = request.GET.get('text', None)
+        if text:
+            self.object_list = self.object_list.filter(Q(name__icontains=text))
+
+        location = request.GET.get('location', None)
+        if location:
+            self.object_list = self.object_list.filter(Q(author__location__name__icontains=location))
+
+        price_from = request.GET.get('price_from', None)
+        price_to = request.GET.get('price_to', None)
+        if price_from:
+            self.object_list = self.object_list.filter(Q(price__gte=price_from))
+        if price_to:
+            self.object_list = self.object_list.filter(Q(price__lte=price_to))
 
         paginator = Paginator(self.object_list.order_by('-price', 'id'), settings.TOTAL_ON_PAGE)
         page_number = request.GET.get('page')
