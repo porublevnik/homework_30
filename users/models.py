@@ -20,9 +20,6 @@ class User(AbstractUser):
     age = models.PositiveIntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
 
-
-
-
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
