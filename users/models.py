@@ -1,5 +1,10 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+from users.validators import EmailDomainValidator, AgeValidator
+
 
 class Location(models.Model):
     name = models.CharField(max_length=250)
@@ -19,6 +24,12 @@ class User(AbstractUser):
     role = models.CharField(max_length=250, choices=ROLES, default="member")
     age = models.PositiveIntegerField(null=True, blank=True)
     locations = models.ManyToManyField(Location)
+    birth_date = models.DateField(default='2000-01-01')
+    email = models.EmailField()
+
+    def save(self, *args, **kwargs):
+        self.set_password(raw_password=self.password)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Пользователь"

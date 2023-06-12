@@ -14,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 from ads.models import Category, Ad, User, Selection
 from ads.permissions import IsOwner, IsStaff
 from ads.serializers import AdSerializer, SelectionSerializer, AdListSerializer, AdDetailSerializer, \
-    SelectionListSerializer, SelectionDetailSerializer, SelectionCreateSerializer
+    SelectionListSerializer, SelectionDetailSerializer, SelectionCreateSerializer, AdCreateSerializer
 from homework_27 import settings
 
 
@@ -24,6 +24,7 @@ class AdsViewSet(ModelViewSet):
     serializers = {
         'list': AdListSerializer,
         'retrieve': AdDetailSerializer,
+        'create': AdCreateSerializer
     }
     default_serializer = AdSerializer
 

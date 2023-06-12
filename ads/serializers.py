@@ -1,10 +1,11 @@
-from rest_framework.fields import SerializerMethodField
+from rest_framework.fields import SerializerMethodField, BooleanField
 from rest_framework.relations import SlugRelatedField
 from rest_framework.serializers import ModelSerializer
 
 from categories.models import Category
 from users.models import User
 from .models import Ad, Selection
+from .validators import check_not_true
 
 
 class AdSerializer(ModelSerializer):
@@ -35,6 +36,14 @@ class AdAuthorSerializer(ModelSerializer):
 class AdDetailSerializer(ModelSerializer):
     author = AdAuthorSerializer()
     category = SlugRelatedField(slug_field='name', queryset=Category.objects.all())
+
+    class Meta:
+        model = Ad
+        fields = '__all__'
+
+
+class AdCreateSerializer(ModelSerializer):
+    is_published = BooleanField(validators=[check_not_true], default=False)
 
     class Meta:
         model = Ad
